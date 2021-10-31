@@ -1,5 +1,9 @@
 # Changelog
 
+* [1.9.2](#1-9-2)
+* [1.9.1](#1-9-1)
+* [1.9.0](#1-9-0)
+* [1.8.2](#1-8-2)
 * [1.8.1](#1-8-1)
 * [1.8.0](#1-8-0)
 * [1.7.2](#1-7-2)
@@ -26,6 +30,196 @@
 * [1.2.1](#1-2-1)
 * [1.2.0](#1-2-0)
 
+
+## 1.9.2
+
+### Changed
+
+* PGO helper scripts no longer set `LC_CTYPE=en_US.UTF-8`. But, note
+  that “full” PGO builds still **require** an UTF-8 locale; you need
+  to set one manually in your build script
+  (https://codeberg.org/dnkl/foot/issues/728).
+
+
+## 1.9.1
+
+### Added
+
+* Warn when it appears the primary font is not monospaced. Can be
+  disabled by setting `[tweak].font-monospace-warn=no`
+  (https://codeberg.org/dnkl/foot/issues/704).
+* PGO build scripts, in the `pgo` directory. See INSTALL.md -
+  _Performance optimized, PGO_, for details
+  (https://codeberg.org/dnkl/foot/issues/701).
+* Braille characters (U+2800 - U+28FF) are now rendered by foot
+  itself (https://codeberg.org/dnkl/foot/issues/702).
+* `-e` command-line option. This option is simply ignored, to appease
+  program launchers that blindly pass `-e` to any terminal emulator
+  (https://codeberg.org/dnkl/foot/issues/184).
+
+
+### Changed
+
+* `-Ddefault-terminfo` is now also applied to the generated terminfo
+  definitions when `-Dterminfo=enabled`.
+* `-Dcustom-terminfo-install-location` no longer accepts `no` as a
+  special value, to disable exporting `TERMINFO`. To achieve the same
+  result, simply don’t set it at all. If it _is_ set, `TERMINFO` is
+  still exported, like before.
+* The default install location for the terminfo definitions have been
+  changed back to `${datadir}/terminfo`.
+* `dpi-aware=auto`: fonts are now scaled using the monitor’s DPI only
+  when **all** monitors have a scaling factor of one
+  (https://codeberg.org/dnkl/foot/issues/714).
+
+
+### Fixed
+
+* Added workaround for GNOME bug where multiple button press events
+  (for the same button) is sent to the CSDs without any release or
+  leave events in between (https://codeberg.org/dnkl/foot/issues/709).
+* Line-wise selection not taking soft line-wrapping into account
+  (https://codeberg.org/dnkl/foot/issues/726).
+
+
+### Contributors
+
+* [craigbarnes](https://codeberg.org/craigbarnes)
+* Arnavion
+
+
+## 1.9.0
+
+### Added
+
+* Window title in the CSDs
+  (https://codeberg.org/dnkl/foot/issues/638).
+* `-Ddocs=disabled|enabled|auto` meson command line option.
+* Support for `~`-expansion in the `include` directive
+  (https://codeberg.org/dnkl/foot/issues/659).
+* Unicode 13 characters U+1FB3C - U+1FB6F, U+1FB9A and U+1FB9B to list
+  of box drawing characters rendered by foot itself (rather than using
+  font glyphs) (https://codeberg.org/dnkl/foot/issues/474).
+* `XM`+`xm` to terminfo.
+* Mouse buttons 6/7 (mouse wheel left/right).
+* `url.uri-characters` option to `foot.ini`
+  (https://codeberg.org/dnkl/foot/issues/654).
+
+
+### Changed
+
+* Terminfo files can now co-exist with the foot terminfo files from
+  ncurses. See `INSTALL.md` for more information
+  (https://codeberg.org/dnkl/foot/issues/671).
+* `bold-text-in-bright=palette-based` now only brightens colors from palette
+* Raised grace period between closing the PTY and sending `SIGKILL` (when
+  terminating the client application) from 4 to 60 seconds.
+* When terminating the client application, foot now sends `SIGTERM` immediately
+  after closing the PTY, instead of waiting 2 seconds.
+* Foot now sends `SIGTERM`/`SIGKILL` to the client application’s process group,
+  instead of just to the client application’s process.
+* `kmous` terminfo capability from `\E[M` to `\E[<`.
+* pt-or-px values (`letter-spacing`, etc) and the line thickness
+  (`tweak.box-drawing-base-thickness`) in box drawing characters are
+  now translated to pixel values using the monitor’s scaling factor
+  when `dpi-aware=no`, or `dpi-aware=auto` and the scaling factor is
+  larger than 1 (https://codeberg.org/dnkl/foot/issues/680).
+* Spawning a new terminal with a working directory that does not exist
+  is no longer a fatal error.
+
+
+### Removed
+
+* `km`/`smm`/`rmm` from terminfo; foot prefixes Alt-key combinations
+  with `ESC`, and not by setting the 8:th “meta” bit, regardless of
+  `smm`/`rmm`. While this _can_ be disabled by, resetting private mode
+  1036, the terminfo should reflect the **default** behavior
+  (https://codeberg.org/dnkl/foot/issues/670).
+* Keypad application mode keys from terminfo; enabling the keypad
+  application mode is not enough to make foot emit these sequences -
+  you also need to disable private mode 1035
+  (https://codeberg.org/dnkl/foot/issues/670).
+
+
+### Fixed
+
+* Rendering into the right margin area with `tweak.overflowing-glyphs`
+  enabled.
+* PGO builds with clang (https://codeberg.org/dnkl/foot/issues/642).
+* Crash in scrollback search mode when selection has been canceled due
+  to terminal content updates
+  (https://codeberg.org/dnkl/foot/issues/644).
+* Foot process not terminating when the Wayland connection is broken
+  (https://codeberg.org/dnkl/foot/issues/651).
+* Output scale being zero on compositors that does not advertise a
+  scaling factor.
+* Slow-to-terminate client applications causing other footclient instances to
+  freeze when closing a footclient window.
+* Underlying cell content showing through in the left-most column of
+  sixels.
+* `cursor.blink` not working in GNOME
+  (https://codeberg.org/dnkl/foot/issues/686).
+* Blinking cursor stops blinking, or becoming invisible, when
+  switching focus from, and then back to a terminal window on GNOME
+  (https://codeberg.org/dnkl/foot/issues/686).
+
+
+### Contributors
+
+* Nihal Jere
+* [nowrep](https://codeberg.org/nowrep)
+* [clktmr](https://codeberg.org/clktmr)
+
+
+## 1.8.2
+
+### Added
+
+* `locked-title=no|yes` to `foot.ini`
+  (https://codeberg.org/dnkl/foot/issues/386).
+* `tweak.overflowing-glyphs` option, which can be enabled to fix rendering
+  issues with glyphs of any width that appear cut-off
+  (https://codeberg.org/dnkl/foot/issues/592).
+
+
+### Changed
+
+* Non-empty lines are now considered to have a hard linebreak,
+  _unless_ an actual word-wrap is inserted.
+* Setting `DECSDM` now _disables_ sixel scrolling, while resetting it
+  _enables_ scrolling (https://codeberg.org/dnkl/foot/issues/631).
+
+
+### Removed
+
+* The `tweak.allow-overflowing-double-width-glyphs` and
+  `tweak.pua-double-width` options (which have been superseded by
+  `tweak.overflowing-glyphs`).
+
+
+### Fixed
+
+* FD exhaustion when repeatedly entering/exiting URL mode with many
+  URLs.
+* Double free of URL while removing duplicated and/or overlapping URLs
+  in URL mode (https://codeberg.org/dnkl/foot/issues/627).
+* Crash when an unclosed OSC-8 URL ran into un-allocated scrollback
+  rows.
+* Some box-drawing characters were rendered incorrectly on big-endian
+  architectures.
+* Crash when resizing the window to the smallest possible size while
+  scrollback search is active.
+* Scrollback indicator being incorrectly rendered when window size is
+  very small.
+* Reduced memory usage in URL mode.
+* Crash when the `E3` escape (`\E[3J`) was executed, and there was a
+  selection, or sixel image, in the scrollback
+  (https://codeberg.org/dnkl/foot/issues/633).
+
+
+### Contributors
+
+* [clktmr](https://codeberg.org/clktmr)
 
 ## 1.8.1
 
