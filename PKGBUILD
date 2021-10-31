@@ -50,6 +50,7 @@ build() {
     --prefix=/usr \
     --buildtype=release \
     --wrap-mode=nodownload \
+    -Dterminfo=disabled \
     -Db_lto=true \
     . build
 
