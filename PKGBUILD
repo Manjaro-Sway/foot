@@ -1,7 +1,7 @@
 # Maintainer: Daniel Eklöf <daniel at ekloef dot se>
 pkgdesc="Wayland terminal emulator - fast, lightweight and minimalistic"
 pkgname=foot
-pkgver=1.9.2  # Don’t forget to update CHANGELOG.md
+pkgver=1.9.2
 pkgrel=1
 arch=('x86_64' 'aarch64')
 url=https://codeberg.org/dnkl/foot
