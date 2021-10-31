@@ -1,7 +1,7 @@
 # Maintainer: Daniel Eklöf <daniel at ekloef dot se>
 pkgdesc="Wayland terminal emulator - fast, lightweight and minimalistic"
 pkgname=foot
-pkgver=1.8.1  # Don’t forget to update CHANGELOG.md
+pkgver=1.9.2  # Don’t forget to update CHANGELOG.md
 pkgrel=1
 arch=('x86_64' 'aarch64')
 url=https://codeberg.org/dnkl/foot
@@ -14,7 +14,7 @@ optdepends=('libnotify: desktop notifications'
             'xdg-utils: URI launching'
             'bash-completion: bash completions for foot itself')
 source=(${pkgname}-${pkgver}.tar.gz::${url}/archive/${pkgver}.tar.gz)
-sha256sums=('53df83617f7fbdd0f8f4c7a06e6e1716da61dbdcfb16aa65383ed31f4996195d')
+sha256sums=('5859d8d7293da4c7c52f45a9756fc7989edc364057e8b86b4e1fbea7bc2b4009')
 
 build() {
   cd foot
@@ -51,7 +51,7 @@ build() {
     --buildtype=release \
     --wrap-mode=nodownload \
     -Db_lto=true \
-    -Dterminfo-install-location=disabled \
+ #   -Dterminfo-install-location=disabled \  had to remove before build would work.  Looks like they took it away
     . build
 
   if [[ ${do_pgo} == yes ]]; then
