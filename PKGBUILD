@@ -51,7 +51,6 @@ build() {
     --buildtype=release \
     --wrap-mode=nodownload \
     -Db_lto=true \
- #   -Dterminfo-install-location=disabled \  had to remove before build would work.  Looks like they took it away
     . build
 
   if [[ ${do_pgo} == yes ]]; then
